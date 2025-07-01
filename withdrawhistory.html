@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Withdrawal Data Viewer</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1f1c2c, #928DAB);
+      color: #fff; text-align: center; padding:20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.1);
+      margin: 10px auto; padding:15px;
+      border-radius:8px; max-width:400px;
+      box-shadow:0 4px 8px rgba(0,0,0,0.3);
+    }
+    .no-data { color: #ffaaaa; margin-top:40px; font-size:18px; }
+    button { margin-top:20px; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; }
+  </style>
+</head>
+<body>
+  <h1>Recent Withdrawals</h1>
+  <div id="list"></div>
+  <p id="empty" class="no-data" style="display:none;">No withdrawal data found.</p>
+  <button onclick="location.href='index.html'">Back to Game</button>
+
+<script>
+  const STORAGE_KEY='coinCollectorWithdrawals';
+  window.onload = ()=>{
+    const list = document.getElementById('list');
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');
+    if(!data.length){
+      document.getElementById('empty').style.display='block';
+      return;
+    }
+    data.reverse().forEach(r=>{
+      const d = document.createElement('div');
+      d.className='card';
+      d.innerHTML = `
+        <strong>Name:</strong> ${r.name}<br>
+        <strong>UID:</strong> ${r.uid}<br>
+        <strong>Diamonds:</strong> ${r.diamonds}<br>
+        <small>${new Date(r.date).toLocaleString()}</small>
+      `;
+      list.appendChild(d);
+    });
+  };
+</script>
+</body>
+</html>
